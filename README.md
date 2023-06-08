@@ -12,9 +12,30 @@ This work is done as sound classification task in Alibaba Israel, link to paper 
 # Third party -
 utils/resample.py is mainly taken from - https://github.com/danpovey/filtering/blob/master/lilfilter/resampler.py
 
+# Installation 
+
+## Dependencies
+
+For python dependency management [poetry](https://python-poetry.org/) is used. See also docker dev container setup in [.devcontainer](.devcontainer/README.md).
+
+```bash
+poetry install
+```
+
+## Datasets
+
+### [ESC-50](https://github.com/karolpiczak/ESC-50)
+
+```bash
+mkdir /data
+cd /data
+wget https://github.com/karoldvl/ESC-50/archive/master.zip
+unzip master.zip
+```
+
 # Network configuration - 
 ## EAT-S - 
-emb_dim 128
+emb_dim 12`
 nf 16
 dim_feedforward 512
 n_layers 4

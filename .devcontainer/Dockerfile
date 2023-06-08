@@ -1,6 +1,6 @@
 FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-runtime
 
-RUN apt-get update && apt-get install -y python3-opengl xvfb ffmpeg git curl
+RUN apt-get update && apt-get install -y python3-opengl xvfb ffmpeg git curl wget unzip
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1

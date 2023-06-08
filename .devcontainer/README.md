@@ -1,4 +1,4 @@
-# Anaconda Dev Container
+# Dev Container
 
 Can be used as a [VS Code devcontainer](https://code.visualstudio.com/docs/remote/containers).
 
