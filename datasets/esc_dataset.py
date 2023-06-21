@@ -29,6 +29,19 @@ class ESCDataset(torch.utils.data.Dataset):
         self.audio_files = sorted(fnames)
         self.label2idx = dict(zip(self.labels, range(len(self.labels))))
         self.transforms = transforms
+        # resample if needed
+        test_sample_rate = torchaudio.load(self.audio_files[0])[1]
+        if test_sample_rate != self.sampling_rate:
+            self.audio_files = self._resample(self.audio_files, sampling_rate)
+
+    def _resample(self, f_names, sampling_rate):
+        resampled_fnames = []
+        for f in f_names:
+            audio, org_sample_rate = torchaudio.load(f)
+            audio = torchaudio.transforms.Resample(orig_freq=org_sample_rate, new_freq=sampling_rate)(audio)
+            torchaudio.save(f, audio, sampling_rate)
+            resampled_fnames.append(f)
+        return resampled_fnames
 
     def _get_labels(self, f_names):
         self.labels = sorted(list(set([f.split('/')[-2] for f in f_names])))
