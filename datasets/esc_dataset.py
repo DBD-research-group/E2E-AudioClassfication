@@ -4,7 +4,7 @@ import torchaudio
 import os
 import glob
 import random
-from datasets.audio_augs import AudioAugs
+from workspace.datasets.audio_augs import AudioAugs
 
 
 class ESCDataset(torch.utils.data.Dataset):
