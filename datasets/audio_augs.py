@@ -92,11 +92,35 @@ class RandomLPHPFilter(AugBasic):
 
 
 class RandomTimeShift(AugBasic):
+    """
+    Randomly shifts the time axis of an audio sample by a random amount.
+
+    Args:
+        p (float, optional): Probability of applying the augmentation. Default: 0.5.
+        max_time_shift (int, optional): Maximum time shift in samples. If None, defaults to 1/10th of the sample length. Default: None.
+    """
+
     def __init__(self, p=0.5, max_time_shift=None):
+        """
+        Initializes a new instance of the RandomTimeShift class.
+
+        Args:
+            p (float, optional): Probability of applying the augmentation. Default: 0.5.
+            max_time_shift (int, optional): Maximum time shift in samples. If None, defaults to 1/10th of the sample length. Default: None.
+        """
         self.p = p
         self.max_time_shift = max_time_shift
 
     def __call__(self, sample):
+        """
+        Applies the random time shift augmentation to an audio sample.
+
+        Args:
+            sample (torch.Tensor): Audio sample to augment.
+
+        Returns:
+            torch.Tensor: Augmented audio sample.
+        """
         if random.random() < self.p:
             if self.max_time_shift is None:
                 self.max_time_shift = sample.shape[-1] // 10
@@ -129,11 +153,35 @@ class RandomTimeShift(AugBasic):
 
 
 class RandomTimeMasking(AugBasic):
+    """
+    Randomly masks a portion of an audio sample in the time domain.
+
+    Args:
+        p (float, optional): Probability of applying the augmentation. Default: 0.5.
+        n_mask (int, optional): Number of time steps to mask. If None, defaults to 5% of the sample length.
+    """
+
     def __init__(self, p=0.5, n_mask=None):
+        """
+        Initializes a new instance of the RandomTimeMasking class.
+
+        Args:
+            p (float, optional): Probability of applying the augmentation. Default: 0.5.
+            n_mask (int, optional): Number of time steps to mask. If None, defaults to 5% of the sample length.
+        """
         self.n_mask = n_mask
         self.p = p
 
     def __call__(self, sample):
+        """
+        Applies the random time masking augmentation to an audio sample.
+
+        Args:
+            sample (torch.Tensor): Audio sample to augment.
+
+        Returns:
+            torch.Tensor: Augmented audio sample.
+        """
         if self.n_mask is None:
             self.n_mask = int(0.05 * sample.shape[-1])
         if random.random() < self.p:
@@ -143,25 +191,39 @@ class RandomTimeMasking(AugBasic):
         return sample
 
 
-class RandomMuLawCompression(AugBasic):
-    def __init__(self, p=0.5, n_channels=256):
-        self.n_channels = n_channels
-        self.p = p
-
-    def __call__(self, sample):
-        if random.random() < self.p:
-            e = torchaudio.functional.mu_law_encoding(sample, self.n_channels)
-            sample = torchaudio.functional.mu_law_decoding(e, self.n_channels)
-        return sample
-
-
 class RandomAmp(AugBasic):
+    """
+    Randomly amplifies an audio sample by a factor between `low` and `high`.
+
+    Args:
+        low (float): Lower bound of the amplification factor.
+        high (float): Upper bound of the amplification factor.
+        p (float, optional): Probability of applying the augmentation. Default: 0.5.
+    """
+
     def __init__(self, low, high, p=0.5):
+        """
+        Initializes a new instance of the RandomAmp class.
+
+        Args:
+            low (float): Lower bound of the amplification factor.
+            high (float): Upper bound of the amplification factor.
+            p (float, optional): Probability of applying the augmentation. Default: 0.5.
+        """
         self.low = low
         self.high = high
         self.p = p
 
     def __call__(self, sample):
+        """
+        Applies the random amplification augmentation to an audio sample.
+
+        Args:
+            sample (torch.Tensor): Audio sample to augment.
+
+        Returns:
+            torch.Tensor: Augmented audio sample.
+        """
         if random.random() < self.p:
             amp = torch.FloatTensor(1).uniform_(self.low, self.high)
             sample.mul_(amp)
@@ -179,10 +241,32 @@ class RandomFlip(AugBasic):
 
 
 class RandomAdd180Phase(AugBasic):
+    """
+    Randomly adds a 180-degree phase shift to an audio sample.
+
+    Args:
+        p (float, optional): Probability of applying the augmentation. Default: 0.5.
+    """
+
     def __init__(self, p=0.5):
+        """
+        Initializes a new instance of the RandomAdd180Phase class.
+
+        Args:
+            p (float, optional): Probability of applying the augmentation. Default: 0.5.
+        """
         self.p = p
 
     def __call__(self, sample):
+        """
+        Applies the random 180-degree phase shift augmentation to an audio sample.
+
+        Args:
+            sample (torch.Tensor): Audio sample to augment.
+
+        Returns:
+            torch.Tensor: Augmented audio sample.
+        """
         if random.random() < self.p:
             sample.mul_(-1)
         return sample
@@ -366,13 +450,41 @@ class RandomAddSine(AugBasic):
 
 
 class RandomAmpSegment(AugBasic):
+    """
+    Randomly amplifies a segment of an audio sample by a factor between `low` and `high`.
+
+    Args:
+        low (float): Lower bound of the amplification factor.
+        high (float): Upper bound of the amplification factor.
+        max_len (int, optional): Maximum length of the segment to amplify. If None, defaults to 1/10 of the sample length.
+        p (float, optional): Probability of applying the augmentation. Default: 0.5.
+    """
+
     def __init__(self, low, high, max_len=None, p=0.5):
+        """
+        Initializes a new instance of the RandomAmpSegment class.
+
+        Args:
+            low (float): Lower bound of the amplification factor.
+            high (float): Upper bound of the amplification factor.
+            max_len (int, optional): Maximum length of the segment to amplify. If None, defaults to 1/10 of the sample length.
+            p (float, optional): Probability of applying the augmentation. Default: 0.5.
+        """
         self.low = low
         self.high = high
         self.max_len = max_len
         self.p = p
 
     def __call__(self, sample):
+        """
+        Applies the random segment amplification augmentation to an audio sample.
+
+        Args:
+            sample (torch.Tensor): Audio sample to augment.
+
+        Returns:
+            torch.Tensor: Augmented audio sample.
+        """
         if random.random() < self.p:
             if self.max_len is None:
                 self.max_len = sample.shape[-1] // 10
@@ -408,11 +520,35 @@ class RandomPhNoise(AugBasic):
 
 
 class RandomCyclicShift(AugBasic):
+    """
+    Randomly applies a cyclic shift to an audio sample.
+
+    Args:
+        max_time_shift (int, optional): Maximum number of time steps to shift the sample. If None, defaults to the sample length.
+        p (float, optional): Probability of applying the augmentation. Default: 0.5.
+    """
+
     def __init__(self, max_time_shift=None, p=0.5):
+        """
+        Initializes a new instance of the RandomCyclicShift class.
+
+        Args:
+            max_time_shift (int, optional): Maximum number of time steps to shift the sample. If None, defaults to the sample length.
+            p (float, optional): Probability of applying the augmentation. Default: 0.5.
+        """
         self.max_time_shift = max_time_shift
         self.p = p
 
     def __call__(self, sample):
+        """
+        Applies the random cyclic shift augmentation to an audio sample.
+
+        Args:
+            sample (torch.Tensor): Audio sample to augment.
+
+        Returns:
+            torch.Tensor: Augmented audio sample.
+        """
         if random.random() < self.p:
             if self.max_time_shift is None:
                 self.max_time_shift = sample.shape[-1]
