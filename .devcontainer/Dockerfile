@@ -1,14 +1,16 @@
-FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-runtime
+FROM pytorchlightning/pytorch_lightning:base-cuda-py3.9-torch1.12-cuda11.6.1
 
-RUN apt-get update && apt-get install -y python3-opengl xvfb ffmpeg git curl wget unzip
+# set non interactive mode
+ARG DEBIAN_FRONTEND=noninteractive
 
-# Keeps Python from generating .pyc files in the container
-ENV PYTHONDONTWRITEBYTECODE=1
+# install dependencies to build python packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libcairo2-dev \
+    pkg-config \
+    python3-dev
 
-# Turns off buffering for easier container logging
-ENV PYTHONUNBUFFERED=1
+# copy the requirements.txt file first to avoid re-installing dependencies
+COPY requirements.txt .
 
-# istall poetry 
-RUN curl -sSL https://install.python-poetry.org | python3 - 
-
-ENV PATH="/root/.local/bin:$PATH"
+# install dependencies
+RUN pip install -r requirements.txt
