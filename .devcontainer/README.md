@@ -9,7 +9,7 @@ You can also use VS Code "Simple Browser" (search in Command Palette).
 
 ## How to add dependency
 
-### OS (Debian) depenency
+### OS (Debian) dependency
 
 Install from container shell
 
