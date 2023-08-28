@@ -15,5 +15,5 @@ We use the [ESC-50 dataset](https://github.com/karolpiczak/ESC-50) downloaded fr
 
 ## Notebook
 
-See `notebooks/lightning.ipynb` for a simple exa`ple of how to train the model with Lightning.
+See `notebooks/lightning.ipynb` for a simple example of how to train the model with Lightning.
 
