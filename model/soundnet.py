@@ -94,6 +94,11 @@ class Down(nn.Module):
 
 
 class SoundNetRaw(nn.Module):
+    '''
+    NeuralNetwork for sound classification
+    expected input shape: (batch_size, 1, clip_length)
+    output shape: (batch_size, n_classes)
+    '''
     def __init__(self, nf=32, clip_length=None, embed_dim=128, n_layers=4, nhead=8, factors=[4, 4, 4, 4], n_classes=None, dim_feedforward=512):
         super().__init__()
         model = [

@@ -43,15 +43,14 @@ class BatchAugs(AugBasic):
         else:
             self.random_resample = []
 
-    def __call__(self, x, y, epoch):
+    def __call__(self, x, y):
         '''resample'''
         if len(self.random_resample) > 0 and random.random() < 0.5:
             R = self.random_resample[random.randint(0, len(self.random_resample) - 1)]
             x = batch_resample(R, x, self.params['seq_len'])
         '''mix'''
         if len(self.params['augs']) > 0 and \
-                random.random() <= self.params['mix_ratio'] \
-                and epoch > self.params['epoch_mix']:
+                random.random() <= self.params['mix_ratio']:
             is_mixed = True
             i = random.randint(0, len(self.params['augs']) - 1)
             aug = self.params['augs'][i]
