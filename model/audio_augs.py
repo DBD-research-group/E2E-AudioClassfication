@@ -5,7 +5,7 @@ import random
 import scipy
 import torch.nn.functional as F
 from scipy.sparse import coo_matrix
-from utils.helper_funcs import AugBasic
+from .utils.helper_funcs import AugBasic
 
 
 class RandomRIR(AugBasic):
