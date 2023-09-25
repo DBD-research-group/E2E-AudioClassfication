@@ -1,8 +1,8 @@
 import torch
 import torch.nn.functional as F
 import random
-from utils.resample import Resampler
-from utils.helper_funcs import AugBasic
+from .utils.resample import Resampler
+from .utils.helper_funcs import AugBasic
 
 
 def pad_sample_seq_batch(x, n_samples):
@@ -158,6 +158,18 @@ class BatchAugs(AugBasic):
         return data, targets
 
     def mix_loss(self, logits, target, n_classes=None, pred_one_hot=None):
+        """
+        Computes the mixed loss for a batch of examples.
+
+        Args:
+            logits (torch.Tensor): The predicted logits for the examples.
+            target (tuple): A tuple containing the target labels and shuffled labels, along with the mixing coefficient.
+            n_classes (int): The number of output classes.
+            pred_one_hot (bool): Whether the predicted logits are already one-hot encoded.
+
+        Returns:
+            torch.Tensor: The mixed loss for the batch of examples.
+        """
         target, target_shuffled, lam = target
         lam = lam.view(-1, 1)
         if self.params['mix_loss'] == 'ce':
